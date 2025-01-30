@@ -1,4 +1,3 @@
 package com.sendbird.sendbirdtalk
 
-class ChatListActivity {
-}
+class ChatListActivity

@@ -12,7 +12,7 @@ const val PREFERENCE_KEY_NOTIFICATION_USE_FEED_CHANNEL_ONLY = "PREFERENCE_KEY_NO
 const val PREFERENCE_KEY_REGION = "PREFERENCE_KEY_REGION"
 
 val Context.sendbirdTalkPreference by preferencesDataStore(
-    name = "sendbird_talk_preferences"
+    name = "sendbird_talk_preferences",
 )
 
 val SENDBIRD_PREFERENCES_NAME = stringPreferencesKey("sendbird_preferences_name")
@@ -20,4 +20,3 @@ val PREFERENCE_KEY_APP_ID = stringPreferencesKey("preference_key_app_id")
 val PREFERENCE_KEY_USER_ID = stringPreferencesKey("preference_key_user_id")
 val PREFERENCE_KEY_NICKNAME = stringPreferencesKey("preference_key_nickname")
 val PREFERENCE_KEY_PROFILE_URL = stringPreferencesKey("preference_key_profile_url")
-

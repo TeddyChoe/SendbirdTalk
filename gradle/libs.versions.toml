@@ -27,4 +27,5 @@ uikit = { group = "com.sendbird.sdk", name = "uikit", version.ref = "uiKit" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.2" }
 

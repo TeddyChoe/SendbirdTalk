@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
             afterTextChanged = {
                 viewModel.edit(it.toString())
                 checkValidEmail(it.toString())
-            }
+            },
         )
 
         binding.btLogin.setOnClickListener {
@@ -53,15 +53,14 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
 
         binding.btQrLogin.setOnClickListener {
-            //TODO: QR 로그인 지원
+            // TODO: QR 로그인 지원
         }
 
         binding.cbAutoLogin.setOnCheckedChangeListener { buttonView, isChecked ->
-            //TODO: 자동 로그인 프리퍼런스에 값 입력
+            // TODO: 자동 로그인 프리퍼런스에 값 입력
         }
     }
 

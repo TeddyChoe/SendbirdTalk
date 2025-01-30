@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             startChatActivity()
         }
-
     }
 
     private suspend fun startChatActivity() {
@@ -42,10 +41,11 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun isSaveUserInfo(): Boolean {
         // preference에 저장된 user_id가 있는지 확인
-        val userId = sendbirdTalkPreference.edit { preference ->
-            val currentCounterValue = preference[SENDBIRD_PREFERENCES_NAME] ?: 0
-            preference[SENDBIRD_PREFERENCES_NAME] = "teddy"
-        }
+        val userId =
+            sendbirdTalkPreference.edit { preference ->
+                val currentCounterValue = preference[SENDBIRD_PREFERENCES_NAME] ?: 0
+                preference[SENDBIRD_PREFERENCES_NAME] = "teddy"
+            }
         return false
     }
 }

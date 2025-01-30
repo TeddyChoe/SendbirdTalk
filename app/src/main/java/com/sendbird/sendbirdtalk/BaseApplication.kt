@@ -34,54 +34,55 @@ class BaseApplication : Application() {
     }
 
     private fun initUIKit() {
-        SendbirdUIKit.init(object : SendbirdUIKitAdapter {
-            override fun getAppId(): String {
-                val appId = APP_ID
-                Log.d("BaseApplication", "appId: $appId")
-                return appId
-            }
-
-            override fun getAccessToken(): String {
-                return ""
-            }
-
-            override fun getUserInfo(): UserInfo {
-                return object : UserInfo {
-                    override fun getUserId(): String =
-                        runBlocking {
-                            sendbirdTalkPreference.data.first()[PREFERENCE_KEY_USER_ID] ?: ""
-                        }
-
-
-                    override fun getNickname(): String =
-                        runBlocking {
-                            sendbirdTalkPreference.data.first()[PREFERENCE_KEY_NICKNAME] ?: ""
-                        }
-
-
-                    override fun getProfileUrl(): String =
-                        runBlocking {
-                            sendbirdTalkPreference.data.first()[PREFERENCE_KEY_PROFILE_URL] ?: ""
-                        }
+        SendbirdUIKit.init(
+            object : SendbirdUIKitAdapter {
+                override fun getAppId(): String {
+                    val appId = APP_ID
+                    Log.d("BaseApplication", "appId: $appId")
+                    return appId
                 }
-            }
 
-            override fun getInitResultHandler(): InitResultHandler {
-                return object : InitResultHandler {
-                    override fun onMigrationStarted() {
-                        initState.value = InitState.MIGRATING
-                    }
+                override fun getAccessToken(): String {
+                    return ""
+                }
 
-                    override fun onInitFailed(e: SendbirdException) {
-                        initState.value = InitState.FAILED
-                    }
+                override fun getUserInfo(): UserInfo {
+                    return object : UserInfo {
+                        override fun getUserId(): String =
+                            runBlocking {
+                                sendbirdTalkPreference.data.first()[PREFERENCE_KEY_USER_ID] ?: ""
+                            }
 
-                    override fun onInitSucceed() {
-                        initState.value = InitState.SUCCEED
+                        override fun getNickname(): String =
+                            runBlocking {
+                                sendbirdTalkPreference.data.first()[PREFERENCE_KEY_NICKNAME] ?: ""
+                            }
+
+                        override fun getProfileUrl(): String =
+                            runBlocking {
+                                sendbirdTalkPreference.data.first()[PREFERENCE_KEY_PROFILE_URL] ?: ""
+                            }
                     }
                 }
-            }
-        }, this)
+
+                override fun getInitResultHandler(): InitResultHandler {
+                    return object : InitResultHandler {
+                        override fun onMigrationStarted() {
+                            initState.value = InitState.MIGRATING
+                        }
+
+                        override fun onInitFailed(e: SendbirdException) {
+                            initState.value = InitState.FAILED
+                        }
+
+                        override fun onInitSucceed() {
+                            initState.value = InitState.SUCCEED
+                        }
+                    }
+                }
+            },
+            this,
+        )
     }
 
     fun initStateChanges(): LiveData<InitState> {
