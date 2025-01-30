@@ -17,18 +17,26 @@ import com.sendbird.uikit.consts.ThreadReplySelectType
 import com.sendbird.uikit.consts.TypingIndicatorType
 import com.sendbird.uikit.interfaces.UserInfo
 import com.sendbird.uikit.model.configurations.UIKitConfig
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 private const val APP_ID = "FEA2129A-EA73-4EB9-9E0B-EC738E7EB768"
 
 class BaseApplication : Application() {
+    private var _userId: String = ""
+    private var _nickname: String = ""
+    private var _profileUrl: String = ""
+
     companion object {
         internal val initState = MutableLiveData(InitState.NONE)
     }
 
     override fun onCreate() {
         super.onCreate()
+        collectDataStore()
         initUIKit()
         setupConfigurations()
     }
@@ -42,26 +50,20 @@ class BaseApplication : Application() {
                     return appId
                 }
 
+                /**
+                 * If return null, login to guest mode that restricted to use some features.
+                 */
                 override fun getAccessToken(): String {
                     return ""
                 }
 
                 override fun getUserInfo(): UserInfo {
                     return object : UserInfo {
-                        override fun getUserId(): String =
-                            runBlocking {
-                                sendbirdTalkPreference.data.first()[PREFERENCE_KEY_USER_ID] ?: ""
-                            }
+                        override fun getUserId(): String = _userId
 
-                        override fun getNickname(): String =
-                            runBlocking {
-                                sendbirdTalkPreference.data.first()[PREFERENCE_KEY_NICKNAME] ?: ""
-                            }
+                        override fun getNickname(): String = _nickname
 
-                        override fun getProfileUrl(): String =
-                            runBlocking {
-                                sendbirdTalkPreference.data.first()[PREFERENCE_KEY_PROFILE_URL] ?: ""
-                            }
+                        override fun getProfileUrl(): String = _profileUrl
                     }
                 }
 
@@ -83,6 +85,22 @@ class BaseApplication : Application() {
             },
             this,
         )
+    }
+    
+    private fun collectDataStore() {
+        CoroutineScope(Dispatchers.Main).launch {
+            sendbirdTalkPreference.data.map {
+                _userId = it[PREFERENCE_KEY_USER_ID] ?: ""
+            }.collect()
+
+            sendbirdTalkPreference.data.map {
+                _nickname = it[PREFERENCE_KEY_NICKNAME] ?: ""
+            }.collect()
+
+            sendbirdTalkPreference.data.map {
+                _profileUrl = it[PREFERENCE_KEY_PROFILE_URL] ?: ""
+            }.collect()
+        }
     }
 
     fun initStateChanges(): LiveData<InitState> {
